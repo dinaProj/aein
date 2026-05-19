@@ -1,0 +1,183 @@
+⚠ The "middleware" file convention is deprecated. Please use "proxy" instead. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
+[browser] Uncaught Error: Hydration failed because the server rendered HTML didn't match the client. As a result this tree will be regenerated on the client. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+https://react.dev/link/hydration-mismatch
+
+  ...
+    <SegmentViewNode type="layout" pagePath="[locale]/l...">
+      <SegmentTrieNode>
+      <script>
+      <script>
+      <script>
+      <LocaleLayout>
+        <div dir="rtl" lang="fa" className="min-h-scre...">
+          <Header locale="fa">
+            <header className="fixed top-...">
+              <nav className="container ...">
+                <div className="flex items...">
+                  <LinkComponent>
+                  <div>
+                  <div className="flex items...">
+                    <Button>
+                    <LinkComponent href="/fa/cart">
+                      <a ref={function} onClick={function onClick} onMouseEnter={function onMouseEnter} ...>
+                        <Button variant="ghost" size="icon" className="relative">
+                          <button data-slot="button" className={"inline-f..."}>
+                            <ShoppingCart>
+                            <motion.span initial={{scale:0}} animate={{scale:1}} className="absolute -...">
++                             <span
++                               className="absolute -top-1 -right-1 bg-accent text-accent-foreground text-xs font-bold..."
++                               style={{transform:"scale(0)"}}
++                               ref={function useMotionRef.useCallback}
++                             >
+                    ...
+                ...
+          ...
+
+    at <unknown> (https://react.dev/link/hydration-mismatch)
+    at _ (chrome-extension://egjidjbpglichdcondbcbdnbeeppgdph/inpage.js:166:26614)
+    at w (chrome-extension://egjidjbpglichdcondbcbdnbeeppgdph/inpage.js:166:26798)
+    at Y (chrome-extension://egjidjbpglichdcondbcbdnbeeppgdph/inpage.js:166:27157)
+    at span (<anonymous>)
+    at Header (components/header.tsx:104:19)
+    at LocaleLayout (app\[locale]\layout.tsx:23:7)
+  102 |                 <ShoppingCart className="h-5 w-5" />
+  103 |                 {cartItems > 0 && (
+> 104 |                   <motion.span
+      |                   ^
+  105 |                     initial={{ scale: 0 }}
+  106 |                     animate={{ scale: 1 }}
+  107 |                     className="absolute -top-1 -right-1 bg-accent text-accent-foreground ...
+[browser] Detected `scroll-behavior: smooth` on the `<html>` element. To disable smooth scrolling during route transitions, add `data-scroll-behavior="smooth"` to your <html> element. Learn more: https://nextjs.org/docs/messages/missing-data-scroll-behavior
+[browser] Detected `scroll-behavior: smooth` on the `<html>` element. To disable smooth scrolling during route transitions, add `data-scroll-behavior="smooth"` to your <html> element. Learn more: https://nextjs.org/docs/messages/missing-data-scroll-behavior
+[browser] Uncaught Error: Hydration failed because the server rendered HTML didn't match the client. As a result this tree will be regenerated on the client. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+https://react.dev/link/hydration-mismatch
+
+  ...
+    <SegmentViewNode type="layout" pagePath="[locale]/l...">
+      <SegmentTrieNode>
+      <script>
+      <script>
+      <script>
+      <LocaleLayout>
+        <div dir="rtl" lang="fa" className="min-h-scre...">
+          <Header locale="fa">
+            <header className="fixed top-...">
+              <nav className="container ...">
+                <div className="flex items...">
+                  <LinkComponent>
+                  <div>
+                  <div className="flex items...">
+                    <Button>
+                    <LinkComponent href="/fa/cart">
+                      <a ref={function} onClick={function onClick} onMouseEnter={function onMouseEnter} ...>
+                        <Button variant="ghost" size="icon" className="relative">
+                          <button data-slot="button" className={"inline-f..."}>
+                            <ShoppingCart>
+                            <motion.span initial={{scale:0}} animate={{scale:1}} className="absolute -...">
++                             <span
++                               className="absolute -top-1 -right-1 bg-accent text-accent-foreground text-xs font-bold..."
++                               style={{transform:"scale(0)"}}
++                               ref={function useMotionRef.useCallback}
++                             >
+                    ...
+                ...
+          ...
+
+    at <unknown> (https://react.dev/link/hydration-mismatch)
+    at _ (chrome-extension://egjidjbpglichdcondbcbdnbeeppgdph/inpage.js:166:26614)
+    at w (chrome-extension://egjidjbpglichdcondbcbdnbeeppgdph/inpage.js:166:26798)
+    at Y (chrome-extension://egjidjbpglichdcondbcbdnbeeppgdph/inpage.js:166:27157)
+    at span (<anonymous>)
+    at Header (components/header.tsx:104:19)
+    at LocaleLayout (app\[locale]\layout.tsx:23:7)
+  102 |                 <ShoppingCart className="h-5 w-5" />
+  103 |                 {cartItems > 0 && (
+> 104 |                   <motion.span
+      |                   ^
+  105 |                     initial={{ scale: 0 }}
+  106 |                     animate={{ scale: 1 }}
+  107 |                     className="absolute -top-1 -right-1 bg-accent text-accent-foreground ...
+[browser] Detected `scroll-behavior: smooth` on the `<html>` element. To disable smooth scrolling during route transitions, add `data-scroll-behavior="smooth"` to your <html> element. Learn more: https://nextjs.org/docs/messages/missing-data-scroll-behavior
+[browser] Detected `scroll-behavior: smooth` on the `<html>` element. To disable smooth scrolling during route transitions, add `data-scroll-behavior="smooth"` to your <html> element. Learn more: https://nextjs.org/docs/messages/missing-data-scroll-behavior
+[browser] Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+[browser] Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+[browser] Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+[browser] Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+[browser] Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+[browser] Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+[browser] Uncaught Error: Hydration failed because the server rendered HTML didn't match the client. As a result this tree will be regenerated on the client. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+https://react.dev/link/hydration-mismatch
+
+  ...
+    <SegmentViewNode type="layout" pagePath="[locale]/l...">
+      <SegmentTrieNode>
+      <script>
+      <script>
+      <script>
+      <LocaleLayout>
+        <div dir="rtl" lang="fa" className="min-h-scre...">
+          <Header locale="fa">
+            <header className="fixed top-...">
+              <nav className="container ...">
+                <div className="flex items...">
+                  <LinkComponent>
+                  <div>
+                  <div className="flex items...">
+                    <Button>
+                    <LinkComponent href="/fa/cart">
+                      <a ref={function} onClick={function onClick} onMouseEnter={function onMouseEnter} ...>
+                        <Button variant="ghost" size="icon" className="relative">
+                          <button data-slot="button" className={"inline-f..."}>
+                            <ShoppingCart>
+                            <motion.span initial={{scale:0}} animate={{scale:1}} className="absolute -...">
++                             <span
++                               className="absolute -top-1 -right-1 bg-accent text-accent-foreground text-xs font-bold..."
++                               style={{transform:"scale(0)"}}
++                               ref={function useMotionRef.useCallback}
++                             >
+                    ...
+                ...
+          ...
+
+    at <unknown> (https://react.dev/link/hydration-mismatch)
+    at _ (chrome-extension://egjidjbpglichdcondbcbdnbeeppgdph/inpage.js:166:26614)
+    at w (chrome-extension://egjidjbpglichdcondbcbdnbeeppgdph/inpage.js:166:26798)
+    at Y (chrome-extension://egjidjbpglichdcondbcbdnbeeppgdph/inpage.js:166:27157)
+    at span (<anonymous>)
+    at Header (components/header.tsx:104:19)
+    at LocaleLayout (app\[locale]\layout.tsx:23:7)
+  102 |                 <ShoppingCart className="h-5 w-5" />
+  103 |                 {cartItems > 0 && (
+> 104 |                   <motion.span
+      |                   ^
+  105 |                     initial={{ scale: 0 }}
+  106 |                     animate={{ scale: 1 }}
+  107 |                     className="absolute -top-1 -right-1 bg-accent text-accent-foreground ...
+[browser] Detected `scroll-behavior: smooth` on the `<html>` element. To disable smooth scrolling during route transitions, add `data-scroll-behavior="smooth"` to your <html> element. Learn more: https://nextjs.org/docs/messages/missing-data-scroll-behavior

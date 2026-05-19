@@ -1,0 +1,182 @@
+{
+  "categories": [
+    {
+      "id": "cat-canvas",
+      "name_fa": "بوم نقاشی",
+      "name_en": "Canvas",
+      "slug": "canvas",
+      "created_at": "2026-05-18T00:00:00.000Z"
+    },
+    {
+      "id": "cat-tshirt",
+      "name_fa": "تی شرت",
+      "name_en": "T-Shirt",
+      "slug": "tshirt",
+      "created_at": "2026-05-18T00:00:00.000Z"
+    },
+    {
+      "id": "cat-poster",
+      "name_fa": "پوستر",
+      "name_en": "Poster",
+      "slug": "poster",
+      "created_at": "2026-05-18T00:00:00.000Z"
+    }
+  ],
+  "products": [
+    {
+      "title_fa": "تست",
+      "title_en": "test",
+      "description_fa": "تستی",
+      "description_en": "testy",
+      "price": 5000000,
+      "category_id": "cat-poster",
+      "product_type": "poster",
+      "images": [],
+      "sizes": [],
+      "payment_link": null,
+      "is_featured": true,
+      "stock": 500000,
+      "id": "1d6628a7-1ed1-420c-a92c-280ba123fae1",
+      "created_at": "2026-05-18T07:09:56.036Z",
+      "updated_at": "2026-05-18T07:40:08.885Z"
+    },
+    {
+      "id": "prod-starter-canvas",
+      "title_fa": "طرح سفارشی روی بوم",
+      "title_en": "Custom Canvas Artwork",
+      "description_fa": "نمونه محصول تستی برای شروع فروشگاه بدون دیتابیس خارجی.",
+      "description_en": "A starter product for testing the shop without an external database.",
+      "price": 49,
+      "category_id": "cat-canvas",
+      "product_type": "canvas",
+      "images": [
+        "/placeholder.jpg"
+      ],
+      "sizes": [
+        "30x40",
+        "50x70"
+      ],
+      "payment_link": null,
+      "is_featured": true,
+      "stock": 10,
+      "created_at": "2026-05-18T00:00:00.000Z",
+      "updated_at": "2026-05-18T00:00:00.000Z"
+    }
+  ],
+  "orders": [
+    {
+      "customer_id": "6351c738-95c6-4ac3-9e35-a6a1a0e68912",
+      "customer_name": "کسری بابازاده",
+      "customer_email": "ax.t978@gmail.com",
+      "customer_phone": "09123456789",
+      "shipping_address": "v  fvvd",
+      "items": [
+        {
+          "product": {
+            "title_fa": "تست",
+            "title_en": "test",
+            "description_fa": "تستی",
+            "description_en": "testy",
+            "price": 5000000,
+            "category_id": "cat-poster",
+            "product_type": "poster",
+            "images": [],
+            "sizes": [],
+            "payment_link": null,
+            "is_featured": true,
+            "stock": 500000,
+            "id": "1d6628a7-1ed1-420c-a92c-280ba123fae1",
+            "created_at": "2026-05-18T07:09:56.036Z",
+            "updated_at": "2026-05-18T07:40:08.885Z",
+            "category": {
+              "id": "cat-poster",
+              "name_fa": "پوستر",
+              "name_en": "Poster",
+              "slug": "poster",
+              "created_at": "2026-05-18T00:00:00.000Z"
+            }
+          },
+          "quantity": 1,
+          "selectedSize": "default"
+        }
+      ],
+      "total_amount": 5000000,
+      "payment_method": "card_to_card",
+      "payment_receipt_url": "/uploads/payment-receipts/c237ef95-309e-4f37-b5a9-80454729d366.jpg",
+      "payment_tracking_number": "6515615615615616",
+      "id": "bfc4a91f-f5fa-4c86-8727-1d28c6518b8a",
+      "status": "cancelled",
+      "payment_status": "rejected",
+      "created_at": "2026-05-18T07:56:31.572Z"
+    },
+    {
+      "customer_name": "کسری بابازاده",
+      "customer_email": "ax.t978@gmail.com",
+      "customer_phone": "09123456789",
+      "shipping_address": "dfbfbfbfbfd",
+      "items": [
+        {
+          "product": {
+            "id": "prod-starter-canvas",
+            "title_fa": "طرح سفارشی روی بوم",
+            "title_en": "Custom Canvas Artwork",
+            "description_fa": "نمونه محصول تستی برای شروع فروشگاه بدون دیتابیس خارجی.",
+            "description_en": "A starter product for testing the shop without an external database.",
+            "price": 49,
+            "category_id": "cat-canvas",
+            "product_type": "canvas",
+            "images": [
+              "/placeholder.jpg"
+            ],
+            "sizes": [
+              "30x40",
+              "50x70"
+            ],
+            "payment_link": null,
+            "is_featured": true,
+            "stock": 10,
+            "created_at": "2026-05-18T00:00:00.000Z",
+            "updated_at": "2026-05-18T00:00:00.000Z",
+            "category": {
+              "id": "cat-canvas",
+              "name_fa": "بوم نقاشی",
+              "name_en": "Canvas",
+              "slug": "canvas",
+              "created_at": "2026-05-18T00:00:00.000Z"
+            }
+          },
+          "quantity": 3,
+          "selectedSize": "30x40"
+        }
+      ],
+      "total_amount": 147,
+      "payment_method": "card_to_card",
+      "payment_receipt_url": "/uploads/payment-receipts/c01735af-b593-4fdf-b223-ebd9a85222ce.jpeg",
+      "payment_tracking_number": "6515615615615616",
+      "id": "95075ec4-28c7-48b3-beb0-4f08e0c0b89c",
+      "status": "cancelled",
+      "payment_status": "rejected",
+      "created_at": "2026-05-18T07:41:14.511Z"
+    }
+  ],
+  "customOrders": [],
+  "customers": [
+    {
+      "name": "کسری بابازاده",
+      "email": "ax.t978@gmail.com",
+      "phone": "09123456789",
+      "password_hash": "5d099d3c8e9aea1ac62da512ccb5694e48bbe121148ba89a856dd191015a3c46",
+      "id": "6351c738-95c6-4ac3-9e35-a6a1a0e68912",
+      "created_at": "2026-05-18T07:56:31.555Z"
+    }
+  ],
+  "customerOtps": [
+    {
+      "phone": "09926774783",
+      "code_hash": "09658a5ea5c870388b26a7f4bf29b92db611ac25179b1d4a845dd06f16c8183d",
+      "expires_at": "2026-05-18T17:56:52.986Z",
+      "attempts": 0,
+      "created_at": "2026-05-18T17:54:52.990Z"
+    }
+  ]
+}
