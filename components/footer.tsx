@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { Instagram, Twitter } from 'lucide-react'
+import { Instagram, Send } from 'lucide-react'
 import { getDictionary } from '@/lib/dictionaries'
 import type { Locale } from '@/lib/types'
 
@@ -23,7 +23,7 @@ export function Footer({ locale }: FooterProps) {
             <p className="text-muted-foreground text-sm leading-relaxed">
               {locale === 'fa'
                 ? 'فروشگاه هنری آیین شاپ - مجموعه‌ای از تی‌شرت‌های طراحی شده و پوسترهای امروزی'
-                : 'AEIN SHOP Art Store - A collection of canvas art, designer t-shirts, and artistic posters'}
+                : 'AEIN SHOP Art Store - A collection of mugs, designer t-shirts, and artistic posters'}
             </p>
           </div>
 
@@ -48,12 +48,12 @@ export function Footer({ locale }: FooterProps) {
                 </Link>
               </li>
               <li>
-                <Link
-                  href={`/${locale}/custom-order`}
-                  className="text-muted-foreground hover:text-primary transition-colors text-sm"
-                >
+                <span className="text-muted-foreground/60 text-sm cursor-not-allowed">
                   {dict.common.customOrder}
-                </Link>
+                  <span className="ms-2 text-xs">
+                    {locale === 'fa' ? 'فعلا غیرفعال' : 'Disabled'}
+                  </span>
+                </span>
               </li>
             </ul>
           </div>
@@ -61,9 +61,9 @@ export function Footer({ locale }: FooterProps) {
           {/* Social */}
           <div>
             <h4 className="font-semibold mb-4">{dict.common.followUs}</h4>
-            <div className="flex gap-4">
+            <div className="flex flex-wrap items-center gap-4">
               <a
-                href="https://instagram.com"
+                href="https://instagram.com/aein.shopp"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="p-2 rounded-full bg-primary/10 text-primary hover:bg-primary hover:text-primary-foreground transition-colors"
@@ -71,12 +71,12 @@ export function Footer({ locale }: FooterProps) {
                 <Instagram className="h-5 w-5" />
               </a>
               <a
-                href="https://twitter.com"
+                href="https://t.me/AeinShopp"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="p-2 rounded-full bg-primary/10 text-primary hover:bg-primary hover:text-primary-foreground transition-colors"
               >
-                <Twitter className="h-5 w-5" />
+                <Send className="h-5 w-5" />
               </a>
             </div>
           </div>
@@ -86,6 +86,24 @@ export function Footer({ locale }: FooterProps) {
           <p>
             © {currentYear} {dict.common.shopName}. {dict.common.allRightsReserved}
           </p>
+        </div>
+
+        <div className="mt-6 text-center">
+          <a
+            href="https://trustseal.enamad.ir/?id=6204012&Code=A8TiSxBkV7Q6AJhY0GR63qngXNLGrnC1"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-block"
+          >
+            <img
+              referrerPolicy="origin"
+              src="/enamad-logo.png"
+              alt="نماد اعتماد الکترونیکی"
+              data-code="A8TiSxBkV7Q6AJhY0GR63qngXNLGrnC1"
+              className="mx-auto h-16 w-auto"
+              style={{ cursor: 'pointer' }}
+            />
+          </a>
         </div>
       </div>
     </footer>

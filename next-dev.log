@@ -1,92 +1,10 @@
 
 > my-project@0.1.0 dev
-> next dev -p 3000
+> next dev --hostname 127.0.0.1 --port 3001
 
 ▲ Next.js 16.2.6 (Turbopack)
-- Local:         http://localhost:3000
-- Network:       http://192.168.56.1:3000
+- Local:         http://127.0.0.1:3001
+- Network:       http://127.0.0.1:3001
 - Environments: .env.local
-✓ Ready in 656ms
-Creating turbopack project { dir: 'D:\\codes\\aein-shop-website', testMode: true }
-
- GET /fa/cart 200 in 1606ms (next.js: 871ms, proxy.ts: 118ms, generate-params: 606ms, application-code: 618ms)
- GET /fa/cart 200 in 177ms (next.js: 28ms, proxy.ts: 18ms, generate-params: 12ms, application-code: 131ms)
- GET /favicon.ico 200 in 1109ms (next.js: 938ms, generate-params: 892ms, application-code: 170ms)
- GET /fa 200 in 82ms (next.js: 20ms, proxy.ts: 11ms, generate-params: 10ms, application-code: 52ms)
- GET /admin 307 in 115ms (next.js: 31ms, proxy.ts: 6ms, application-code: 78ms)
- GET /admin/login 200 in 164ms (next.js: 23ms, proxy.ts: 4ms, application-code: 137ms)
- POST /api/auth/login 200 in 163ms (next.js: 121ms, proxy.ts: 11ms, application-code: 31ms)
- GET /admin/dashboard 200 in 166ms (next.js: 54ms, proxy.ts: 5ms, application-code: 108ms)
- GET /admin/dashboard 200 in 98ms (next.js: 12ms, proxy.ts: 9ms, application-code: 78ms)
- GET /admin/products 200 in 103ms (next.js: 39ms, proxy.ts: 7ms, application-code: 57ms)
- GET /admin/orders 200 in 83ms (next.js: 35ms, proxy.ts: 6ms, application-code: 42ms)
- GET /admin/dashboard 200 in 66ms (next.js: 8ms, proxy.ts: 5ms, application-code: 54ms)
- GET /fa 200 in 158ms (next.js: 17ms, proxy.ts: 3ms, generate-params: 10ms, application-code: 139ms)
- GET /fa/products/1d6628a7-1ed1-420c-a92c-280ba123fae1 200 in 702ms (next.js: 650ms, proxy.ts: 4ms, application-code: 48ms)
- GET /fa/cart 200 in 65ms (next.js: 19ms, proxy.ts: 4ms, generate-params: 11ms, application-code: 41ms)
- GET /fa/products 200 in 640ms (next.js: 595ms, proxy.ts: 3ms, generate-params: 563ms, application-code: 42ms)
- GET /fa/products/1d6628a7-1ed1-420c-a92c-280ba123fae1 200 in 68ms (next.js: 17ms, proxy.ts: 4ms, application-code: 47ms)
- GET /admin 307 in 92ms (next.js: 5ms, proxy.ts: 5ms, application-code: 82ms)
- GET /admin/login 200 in 64ms (next.js: 3ms, proxy.ts: 3ms, application-code: 58ms)
- POST /api/auth/login 200 in 20ms (next.js: 4ms, proxy.ts: 7ms, application-code: 10ms)
- GET /admin/dashboard 200 in 65ms (next.js: 4ms, proxy.ts: 5ms, application-code: 56ms)
- GET /admin/dashboard 200 in 89ms (next.js: 10ms, proxy.ts: 4ms, application-code: 75ms)
- GET /admin/products 200 in 63ms (next.js: 6ms, proxy.ts: 5ms, application-code: 51ms)
- PATCH /api/products/1d6628a7-1ed1-420c-a92c-280ba123fae1 200 in 872ms (next.js: 849ms, proxy.ts: 3ms, application-code: 20ms)
- GET /admin/products 200 in 146ms (next.js: 96ms, proxy.ts: 4ms, application-code: 45ms)
- GET /fa 200 in 149ms (next.js: 13ms, proxy.ts: 2ms, generate-params: 7ms, application-code: 134ms)
- GET /fa/cart 200 in 66ms (next.js: 22ms, proxy.ts: 5ms, generate-params: 13ms, application-code: 39ms)
- GET /fa/products 200 in 67ms (next.js: 16ms, proxy.ts: 4ms, generate-params: 8ms, application-code: 48ms)
- GET /fa/cart 200 in 57ms (next.js: 17ms, proxy.ts: 4ms, generate-params: 8ms, application-code: 36ms)
- POST /api/orders 200 in 500ms (next.js: 473ms, proxy.ts: 4ms, application-code: 23ms)
- GET /fa/products 200 in 72ms (next.js: 18ms, proxy.ts: 5ms, generate-params: 11ms, application-code: 49ms)
-✓ Compiled in 249ms
-✓ Compiled in 136ms
-✓ Compiled in 136ms
-✓ Compiled in 122ms
-✓ Compiled in 400ms
-✓ Compiled in 117ms
- GET /fa/products 200 in 1676ms (next.js: 574ms, proxy.ts: 914ms, generate-params: 16ms, application-code: 188ms)
- GET /fa/products 200 in 1566ms (next.js: 27ms, proxy.ts: 6ms, generate-params: 40µs, application-code: 1533ms)
- GET /fa/products 200 in 5.4s (next.js: 190ms, proxy.ts: 13ms, generate-params: 319µs, application-code: 5.2s)
- GET /fa/products 200 in 4.3s (next.js: 655ms, proxy.ts: 176ms, generate-params: 316µs, application-code: 3.5s)
- GET /fa/products 200 in 4.3s (next.js: 1880ms, proxy.ts: 203ms, generate-params: 283µs, application-code: 2.2s)
- GET /fa/products 200 in 4.4s (next.js: 2.7s, proxy.ts: 194ms, generate-params: 223µs, application-code: 1519ms)
- GET /fa/products 200 in 4.4s (next.js: 3.6s, proxy.ts: 180ms, generate-params: 69µs, application-code: 569ms)
- GET /fa/products 200 in 4.0s (next.js: 3.5s, proxy.ts: 149ms, generate-params: 79µs, application-code: 446ms)
- GET /fa/products 200 in 1218ms (next.js: 48ms, proxy.ts: 9ms, generate-params: 17ms, application-code: 1162ms)
- GET /fa/products 200 in 1063ms (next.js: 141ms, proxy.ts: 17ms, generate-params: 54µs, application-code: 905ms)
- GET /fa/products 200 in 1048ms (next.js: 223ms, proxy.ts: 36ms, generate-params: 55µs, application-code: 788ms)
- GET /fa/products 200 in 1033ms (next.js: 364ms, proxy.ts: 24ms, generate-params: 59µs, application-code: 645ms)
- GET /fa/products 200 in 1138ms (next.js: 621ms, proxy.ts: 23ms, generate-params: 201µs, application-code: 495ms)
- GET /fa/products 200 in 1112ms (next.js: 737ms, proxy.ts: 17ms, generate-params: 38µs, application-code: 359ms)
- GET /fa/products 200 in 906ms (next.js: 49ms, proxy.ts: 10ms, generate-params: 61µs, application-code: 847ms)
- GET /fa/products 200 in 885ms (next.js: 174ms, proxy.ts: 10ms, generate-params: 93µs, application-code: 701ms)
- GET /fa/products 200 in 799ms (next.js: 181ms, proxy.ts: 28ms, generate-params: 51µs, application-code: 590ms)
- GET /fa/products 200 in 797ms (next.js: 279ms, proxy.ts: 27ms, generate-params: 36µs, application-code: 491ms)
- GET /fa/products 200 in 879ms (next.js: 389ms, proxy.ts: 13ms, generate-params: 19ms, application-code: 477ms)
- GET /fa/products 200 in 870ms (next.js: 559ms, proxy.ts: 10ms, generate-params: 61µs, application-code: 301ms)
- GET /fa/products 200 in 796ms (next.js: 35ms, proxy.ts: 9ms, generate-params: 69µs, application-code: 753ms)
- GET /fa/products 200 in 796ms (next.js: 188ms, proxy.ts: 13ms, generate-params: 61µs, application-code: 595ms)
- GET /fa/products 200 in 699ms (next.js: 277ms, proxy.ts: 14ms, generate-params: 52µs, application-code: 407ms)
- GET /fa/products 200 in 793ms (next.js: 209ms, proxy.ts: 99ms, generate-params: 65µs, application-code: 485ms)
- GET /fa/products 200 in 785ms (next.js: 354ms, proxy.ts: 23ms, generate-params: 42µs, application-code: 408ms)
- GET /fa/products 200 in 775ms (next.js: 444ms, proxy.ts: 19ms, generate-params: 52µs, application-code: 312ms)
- GET /fa/products 200 in 706ms (next.js: 36ms, proxy.ts: 7ms, generate-params: 59µs, application-code: 664ms)
- GET /fa/products 200 in 706ms (next.js: 173ms, proxy.ts: 13ms, generate-params: 11ms, application-code: 520ms)
- GET /fa/products 200 in 698ms (next.js: 163ms, proxy.ts: 97ms, generate-params: 38µs, application-code: 438ms)
- GET /fa/products 200 in 614ms (next.js: 239ms, proxy.ts: 15ms, generate-params: 52µs, application-code: 360ms)
- GET /fa/products 200 in 697ms (next.js: 349ms, proxy.ts: 14ms, generate-params: 59µs, application-code: 334ms)
- GET /fa/products 200 in 700ms (next.js: 421ms, proxy.ts: 10ms, generate-params: 42µs, application-code: 269ms)
- GET /fa/products 200 in 717ms (next.js: 25ms, proxy.ts: 7ms, generate-params: 67µs, application-code: 685ms)
- GET /fa/products 200 in 717ms (next.js: 69ms, proxy.ts: 99ms, generate-params: 63µs, application-code: 550ms)
- GET /fa/products 200 in 616ms (next.js: 151ms, proxy.ts: 12ms, generate-params: 49µs, application-code: 453ms)
- GET /fa/products 200 in 700ms (next.js: 268ms, proxy.ts: 12ms, generate-params: 38µs, application-code: 420ms)
- GET /fa/products 200 in 687ms (next.js: 357ms, proxy.ts: 11ms, generate-params: 50µs, application-code: 320ms)
- GET /fa/products 200 in 694ms (next.js: 350ms, proxy.ts: 100ms, generate-params: 58µs, application-code: 243ms)
- GET /fa/products 200 in 535ms (next.js: 30ms, proxy.ts: 5ms, generate-params: 10ms, application-code: 500ms)
- GET /fa/products 200 in 443ms (next.js: 124ms, proxy.ts: 16ms, generate-params: 53µs, application-code: 303ms)
- GET /fa/products 200 in 521ms (next.js: 54ms, proxy.ts: 85ms, generate-params: 37µs, application-code: 382ms)
- GET /fa/products 200 in 426ms (next.js: 225ms, proxy.ts: 8ms, generate-params: 39µs, application-code: 193ms)
- GET /fa/products 200 in 409ms (next.js: 294ms, proxy.ts: 9ms, generate-params: 54µs, application-code: 105ms)
+✓ Ready in 1283ms
 [?25h

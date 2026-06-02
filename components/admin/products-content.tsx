@@ -4,6 +4,7 @@ import { useState } from 'react'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { Plus, Pencil, Trash2, X } from 'lucide-react'
+import { formatRial } from '@/lib/format'
 import type { Product, Category } from '@/lib/types'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -73,9 +74,11 @@ export function AdminProductsContent({
   const [isLoading, setIsLoading] = useState(false)
   const [newImage, setNewImage] = useState('')
   const [newSize, setNewSize] = useState('')
+  const [message, setMessage] = useState<string | null>(null)
   const isOutOfStock = formData.stock <= 0
 
   const handleEdit = (product: Product) => {
+    setMessage(null)
     setSelectedProduct(product)
     setFormData({
       title_fa: product.title_fa,
@@ -95,6 +98,7 @@ export function AdminProductsContent({
   }
 
   const handleAdd = () => {
+    setMessage(null)
     setSelectedProduct(null)
     setFormData(emptyProduct)
     setIsDialogOpen(true)
@@ -103,16 +107,22 @@ export function AdminProductsContent({
   const handleDelete = async () => {
     if (!selectedProduct) return
     setIsLoading(true)
+    setMessage(null)
 
     try {
       const response = await fetch(`/api/products/${selectedProduct.id}`, {
         method: 'DELETE',
       })
 
-      if (!response.ok) throw new Error('Failed to delete product')
+      if (!response.ok) {
+        const data = await response.json().catch(() => null)
+        throw new Error(data?.error || 'Failed to delete product')
+      }
+      setMessage('محصول با موفقیت حذف شد.')
       router.refresh()
     } catch (error) {
       console.error('Error deleting product:', error)
+      setMessage(error instanceof Error ? error.message : 'حذف محصول انجام نشد.')
     } finally {
       setIsLoading(false)
       setIsDeleteDialogOpen(false)
@@ -123,6 +133,7 @@ export function AdminProductsContent({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
+    setMessage(null)
 
     try {
       const productData = {
@@ -140,12 +151,17 @@ export function AdminProductsContent({
         }
       )
 
-      if (!response.ok) throw new Error('Failed to save product')
+      if (!response.ok) {
+        const data = await response.json().catch(() => null)
+        throw new Error(data?.error || 'Failed to save product')
+      }
 
       setIsDialogOpen(false)
+      setMessage(selectedProduct ? 'محصول با موفقیت ویرایش شد.' : 'محصول با موفقیت ساخته شد.')
       router.refresh()
     } catch (error) {
       console.error('Error saving product:', error)
+      setMessage(error instanceof Error ? error.message : 'ذخیره محصول انجام نشد.')
     } finally {
       setIsLoading(false)
     }
@@ -155,6 +171,69 @@ export function AdminProductsContent({
     if (newImage.trim()) {
       setFormData({ ...formData, images: [...formData.images, newImage.trim()] })
       setNewImage('')
+    }
+  }
+
+  const resizeImageFile = (file: File) => {
+    return new Promise<string>((resolve, reject) => {
+      const reader = new FileReader()
+
+      reader.onload = () => {
+        const image = new window.Image()
+
+        image.onload = () => {
+          const maxSize = 1200
+          const scale = Math.min(1, maxSize / Math.max(image.width, image.height))
+          const width = Math.round(image.width * scale)
+          const height = Math.round(image.height * scale)
+          const canvas = document.createElement('canvas')
+          const context = canvas.getContext('2d')
+
+          if (!context) {
+            reject(new Error('Could not process image'))
+            return
+          }
+
+          canvas.width = width
+          canvas.height = height
+          context.drawImage(image, 0, 0, width, height)
+          resolve(canvas.toDataURL('image/webp', 0.82))
+        }
+
+        image.onerror = () => reject(new Error('Could not read image'))
+        image.src = String(reader.result)
+      }
+
+      reader.onerror = () => reject(new Error('Could not read image'))
+      reader.readAsDataURL(file)
+    })
+  }
+
+  const uploadImages = async (files: FileList | null) => {
+    if (!files?.length) return
+
+    setIsLoading(true)
+    setMessage(null)
+
+    try {
+      const imageFiles = Array.from(files).filter((file) =>
+        file.type.startsWith('image/')
+      )
+
+      if (imageFiles.length === 0) {
+        throw new Error('لطفا یک فایل تصویر انتخاب کنید.')
+      }
+
+      const uploadedImages = await Promise.all(imageFiles.map(resizeImageFile))
+      setFormData((current) => ({
+        ...current,
+        images: [...current.images, ...uploadedImages],
+      }))
+      setMessage('تصویر اضافه شد. برای ثبت نهایی تغییرات، روی ذخیره بزنید.')
+    } catch (error) {
+      setMessage(error instanceof Error ? error.message : 'آپلود تصویر انجام نشد.')
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -182,12 +261,18 @@ export function AdminProductsContent({
   return (
     <div>
       <div className="flex items-center justify-between mb-8">
-        <h1 className="text-3xl font-bold">Products</h1>
+        <h1 className="text-3xl font-bold">محصولات</h1>
         <Button onClick={handleAdd} className="gap-2">
           <Plus className="h-4 w-4" />
-          Add Product
+          افزودن محصول
         </Button>
       </div>
+
+      {message && (
+        <div className="mb-4 rounded-md border border-border bg-secondary/60 p-3 text-sm">
+          {message}
+        </div>
+      )}
 
       <div className="grid gap-4">
         {products.map((product) => (
@@ -210,19 +295,19 @@ export function AdminProductsContent({
                   </p>
                   <div className="flex items-center gap-4 mt-1">
                     <span className="text-sm font-medium text-primary">
-                      ${product.price.toLocaleString()}
+                      {formatRial(product.price, 'admin')}
                     </span>
                     <span className="text-sm text-muted-foreground">
-                      Stock: {product.stock}
+                      موجودی: {product.stock}
                     </span>
                     {product.stock <= 0 && (
                       <span className="text-xs bg-destructive/10 text-destructive px-2 py-0.5 rounded">
-                        Out of stock
+                        اتمام موجودی
                       </span>
                     )}
                     {product.is_featured && (
                       <span className="text-xs bg-accent text-accent-foreground px-2 py-0.5 rounded">
-                        Featured
+                        ویژه
                       </span>
                     )}
                   </div>
@@ -258,10 +343,16 @@ export function AdminProductsContent({
         <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>
-              {selectedProduct ? 'Edit Product' : 'Add Product'}
+              {selectedProduct ? 'ویرایش محصول' : 'افزودن محصول'}
             </DialogTitle>
           </DialogHeader>
           <form onSubmit={handleSubmit} className="space-y-6">
+            {message && (
+              <div className="rounded-md border border-destructive/30 bg-destructive/10 p-3 text-sm text-destructive">
+                {message}
+              </div>
+            )}
+
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <Label>Title (English) *</Label>
@@ -351,7 +442,7 @@ export function AdminProductsContent({
                     })
                   }
                 >
-                  <option value="canvas">Canvas</option>
+                  <option value="canvas">Mug (Coming Soon) / ماگ (بزودی)</option>
                   <option value="tshirt">T-Shirt</option>
                   <option value="poster">Poster</option>
                 </select>
@@ -392,6 +483,21 @@ export function AdminProductsContent({
             {/* Images */}
             <div>
               <Label>Images</Label>
+              <div className="mb-3">
+                <Input
+                  type="file"
+                  accept="image/*"
+                  multiple
+                  disabled={isLoading}
+                  onChange={(e) => {
+                    uploadImages(e.target.files)
+                    e.target.value = ''
+                  }}
+                />
+                <p className="mt-1 text-xs text-muted-foreground">
+                  Upload product images from your device, then click Save.
+                </p>
+              </div>
               <div className="flex gap-2 mb-2">
                 <Input
                   placeholder="Image URL"

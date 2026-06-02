@@ -17,6 +17,7 @@ import {
   Upload,
 } from 'lucide-react'
 import { getDictionary, getDirection } from '@/lib/dictionaries'
+import { formatRial } from '@/lib/format'
 import { useCartStore } from '@/lib/store'
 import type { Locale } from '@/lib/types'
 import { Button } from '@/components/ui/button'
@@ -52,13 +53,8 @@ export function CartContent({ locale }: CartContentProps) {
   const [copied, setCopied] = useState(false)
 
   const formattedTotal = useMemo(
-    () =>
-      new Intl.NumberFormat(locale === 'fa' ? 'fa-IR' : 'en-US', {
-        style: 'currency',
-        currency: locale === 'fa' ? 'IRR' : 'USD',
-        maximumFractionDigits: 0,
-      }).format(getTotalPrice()),
-    [getTotalPrice, locale]
+    () => formatRial(getTotalPrice(), locale),
+    [getTotalPrice, items, locale]
   )
 
   const copyCardNumber = async () => {
@@ -170,11 +166,7 @@ export function CartContent({ locale }: CartContentProps) {
               <AnimatePresence mode="popLayout">
                 {items.map((item, index) => {
                   const title = locale === 'fa' ? item.product.title_fa : item.product.title_en
-                  const itemPrice = new Intl.NumberFormat(locale === 'fa' ? 'fa-IR' : 'en-US', {
-                    style: 'currency',
-                    currency: locale === 'fa' ? 'IRR' : 'USD',
-                    maximumFractionDigits: 0,
-                  }).format(item.product.price * item.quantity)
+                  const itemPrice = formatRial(item.product.price * item.quantity, locale)
 
                   return (
                     <motion.div

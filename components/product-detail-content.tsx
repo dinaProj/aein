@@ -7,6 +7,7 @@ import { motion } from 'framer-motion'
 import { ShoppingCart, ArrowLeft, ArrowRight, Check, ExternalLink } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { getDictionary, getDirection } from '@/lib/dictionaries'
+import { formatRial } from '@/lib/format'
 import { useCartStore } from '@/lib/store'
 import type { Locale, Product } from '@/lib/types'
 import { Button } from '@/components/ui/button'
@@ -30,11 +31,7 @@ export function ProductDetailContent({ locale, product }: ProductDetailContentPr
   const ArrowBackIcon = dir === 'rtl' ? ArrowRight : ArrowLeft
   const title = locale === 'fa' ? product.title_fa : product.title_en
   const description = locale === 'fa' ? product.description_fa : product.description_en
-  const formattedPrice = new Intl.NumberFormat(locale === 'fa' ? 'fa-IR' : 'en-US', {
-    style: 'currency',
-    currency: locale === 'fa' ? 'IRR' : 'USD',
-    maximumFractionDigits: 0,
-  }).format(product.price)
+  const formattedPrice = formatRial(product.price, locale)
 
   const handleAddToCart = () => {
     if (product.stock > 0) {

@@ -12,6 +12,7 @@ import {
   hashCustomerPassword,
   hashVerificationCode,
   normalizePhone,
+  normalizeVerificationCode,
 } from '@/lib/customer-auth'
 
 export async function POST(request: NextRequest) {
@@ -22,7 +23,7 @@ export async function POST(request: NextRequest) {
   }
 
   const normalizedPhone = normalizePhone(phone || '')
-  const normalizedCode = String(code || '').trim()
+  const normalizedCode = normalizeVerificationCode(String(code || ''))
   const accountPassword = String(password || '')
   const otp = await getCustomerOtp(normalizedPhone)
 
@@ -31,8 +32,18 @@ export async function POST(request: NextRequest) {
   }
 
   if (!otp) {
+    console.log('Verify-code no OTP found', { phone: normalizedPhone, code: normalizedCode })
     return NextResponse.json({ error: 'Code not found' }, { status: 400 })
   }
+
+  console.log('Verify-code OTP lookup', {
+    phone: normalizedPhone,
+    code: normalizedCode,
+    storedCodeHash: otp.code_hash,
+    generatedHash: hashVerificationCode(normalizedPhone, normalizedCode),
+    expiresAt: otp.expires_at,
+    attempts: otp.attempts,
+  })
 
   if (new Date(otp.expires_at).getTime() < Date.now()) {
     await deleteCustomerOtp(normalizedPhone)
@@ -46,6 +57,12 @@ export async function POST(request: NextRequest) {
 
   if (otp.code_hash !== hashVerificationCode(normalizedPhone, normalizedCode)) {
     await incrementCustomerOtpAttempts(normalizedPhone)
+    console.log('Verify-code mismatch', {
+      phone: normalizedPhone,
+      code: normalizedCode,
+      expected: otp.code_hash,
+      actual: hashVerificationCode(normalizedPhone, normalizedCode),
+    })
     return NextResponse.json({ error: 'Invalid code' }, { status: 401 })
   }
 

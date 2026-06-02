@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getCustomerByPhone, saveCustomerOtp } from '@/lib/local-db'
+import { getCustomerByPhone, getCustomerOtp, saveCustomerOtp } from '@/lib/local-db'
 import { hashVerificationCode, normalizePhone } from '@/lib/customer-auth'
 import { sendSmsIrVerifyCode } from '@/lib/sms-ir'
 
@@ -28,6 +28,14 @@ export async function POST(request: NextRequest) {
       expires_at: new Date(Date.now() + 2 * 60 * 1000).toISOString(),
     })
 
+    const otpRecorded = await getCustomerOtp(normalizedPhone)
+    console.log('Send-code saved OTP', {
+      phone: normalizedPhone,
+      code,
+      codeHash: otpRecorded?.code_hash,
+      expiresAt: otpRecorded?.expires_at,
+    })
+
     const smsResult = await sendSmsIrVerifyCode(normalizedPhone, code)
 
     return NextResponse.json({
@@ -36,6 +44,7 @@ export async function POST(request: NextRequest) {
     })
   } catch (error) {
     console.error('Send verification code error:', error)
-    return NextResponse.json({ error: 'Failed to send verification code' }, { status: 500 })
+    const message = error instanceof Error ? error.message : 'Failed to send verification code'
+    return NextResponse.json({ error: message }, { status: 500 })
   }
 }

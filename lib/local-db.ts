@@ -18,17 +18,134 @@ type OrderInput = Omit<Order, 'id' | 'created_at' | 'status' | 'payment_status'>
 type CustomerAccountInput = Omit<CustomerAccount, 'id' | 'created_at'>
 type CustomerOtpInput = Omit<CustomerOtp, 'created_at' | 'attempts'>
 
-const dbPath = path.join(process.cwd(), 'data', 'db.json')
+const bundledDbPath = path.join(process.cwd(), 'data', 'db.json')
+const dbPath = process.env.AEIN_DATA_DIR
+  ? path.join(process.env.AEIN_DATA_DIR, 'db.json')
+  : bundledDbPath
+const kvDbKey = process.env.AEIN_KV_DB_KEY || 'aein-shop:db'
+
+function getKvConfig() {
+  const url = process.env.KV_REST_API_URL || process.env.UPSTASH_REDIS_REST_URL
+  const token = process.env.KV_REST_API_TOKEN || process.env.UPSTASH_REDIS_REST_TOKEN
+
+  if (!url || !token) {
+    return null
+  }
+
+  return { url, token }
+}
+
+async function runKvCommand<T>(command: unknown[]): Promise<T> {
+  const config = getKvConfig()
+
+  if (!config) {
+    throw new Error('KV storage is not configured')
+  }
+
+  const response = await fetch(config.url, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${config.token}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(command),
+    cache: 'no-store',
+  })
+
+  if (!response.ok) {
+    throw new Error(`KV storage request failed with ${response.status}`)
+  }
+
+  const data = (await response.json()) as { result: T; error?: string }
+
+  if (data.error) {
+    throw new Error(data.error)
+  }
+
+  return data.result
+}
+
+async function readFileDb(): Promise<LocalDatabase> {
+  let raw: string
+
+  try {
+    raw = await readFile(dbPath, 'utf8')
+  } catch (error: any) {
+    if (error?.code !== 'ENOENT' || dbPath === bundledDbPath) {
+      throw error
+    }
+
+    raw = await readFile(bundledDbPath, 'utf8')
+    await writeFile(dbPath, raw, 'utf8').catch(async () => {
+      await mkdir(path.dirname(dbPath), { recursive: true })
+      await writeFile(dbPath, raw, 'utf8')
+    })
+  }
+
+  return normalizeDb(JSON.parse(raw) as LocalDatabase)
+}
+
+async function writeFileDb(db: LocalDatabase) {
+  await mkdir(path.dirname(dbPath), { recursive: true })
+  await writeFile(dbPath, JSON.stringify(db, null, 2), 'utf8')
+}
+
+async function readKvDb(): Promise<LocalDatabase> {
+  const raw = await runKvCommand<string | null>(['GET', kvDbKey])
+
+  if (raw) {
+    return normalizeDb(JSON.parse(raw) as LocalDatabase)
+  }
+
+  const seedDb = await readFileDb()
+  await runKvCommand(['SET', kvDbKey, JSON.stringify(seedDb)])
+  return seedDb
+}
+
+async function writeKvDb(db: LocalDatabase) {
+  await runKvCommand(['SET', kvDbKey, JSON.stringify(db)])
+}
 
 async function readDb(): Promise<LocalDatabase> {
-  const raw = await readFile(dbPath, 'utf8')
-  const db = JSON.parse(raw) as LocalDatabase
-  return { ...db, customers: db.customers || [], customerOtps: db.customerOtps || [] }
+  return getKvConfig() ? readKvDb() : readFileDb()
 }
 
 async function writeDb(db: LocalDatabase) {
-  await mkdir(path.dirname(dbPath), { recursive: true })
-  await writeFile(dbPath, JSON.stringify(db, null, 2), 'utf8')
+  if (getKvConfig()) {
+    await writeKvDb(db)
+    return
+  }
+
+  await writeFileDb(db)
+}
+
+function normalizeDb(db: LocalDatabase): LocalDatabase {
+  return {
+    ...db,
+    categories: db.categories.map((category) =>
+      category.id === 'cat-canvas'
+        ? {
+            ...category,
+            name_fa: 'ماگ (بزودی)',
+            name_en: 'Mug (Coming Soon)',
+          }
+        : category
+    ),
+    products: db.products.map((product) =>
+      product.category?.id === 'cat-canvas'
+        ? {
+            ...product,
+            category: {
+              ...product.category,
+              name_fa: 'ماگ (بزودی)',
+              name_en: 'Mug (Coming Soon)',
+            },
+          }
+        : product
+    ),
+    customers: db.customers || [],
+    customerOtps: db.customerOtps || [],
+  }
 }
 
 function withCategory(product: Product, categories: Category[]): Product {

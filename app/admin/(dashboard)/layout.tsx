@@ -3,6 +3,9 @@ import { redirect } from 'next/navigation'
 import { AdminSidebar } from '@/components/admin/sidebar'
 import { ADMIN_SESSION_COOKIE, isAdminSessionValid } from '@/lib/auth'
 
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
+
 export default async function AdminLayout({
   children,
 }: {

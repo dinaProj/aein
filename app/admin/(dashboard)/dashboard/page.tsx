@@ -2,6 +2,9 @@ import { getCustomOrders, getOrders, getProducts } from '@/lib/local-db'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Package, ShoppingCart, Palette, DollarSign } from 'lucide-react'
 
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
+
 export default async function AdminDashboardPage() {
   const [products, orders, customOrders] = await Promise.all([
     getProducts(),

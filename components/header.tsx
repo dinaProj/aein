@@ -42,7 +42,6 @@ export function Header({ locale }: HeaderProps) {
   const navItems = [
     { href: `/${locale}`, label: dict.common.home },
     { href: `/${locale}/products`, label: dict.common.products },
-    { href: `/${locale}/custom-order`, label: dict.common.customOrder },
   ]
 
   return (
@@ -83,6 +82,12 @@ export function Header({ locale }: HeaderProps) {
                 {item.label}
               </Link>
             ))}
+            <span className="text-sm font-medium text-muted-foreground/60 cursor-not-allowed">
+              {dict.common.customOrder}
+              <span className="ms-2 text-xs">
+                {locale === 'fa' ? 'فعلا غیرفعال' : 'Disabled'}
+              </span>
+            </span>
           </div>
 
           {/* Actions */}
@@ -157,6 +162,12 @@ export function Header({ locale }: HeaderProps) {
                     {item.label}
                   </Link>
                 ))}
+                <div className="block py-2 px-4 rounded-lg text-muted-foreground/60">
+                  {dict.common.customOrder}
+                  <span className="ms-2 text-xs">
+                    {locale === 'fa' ? 'فعلا غیرفعال' : 'Disabled'}
+                  </span>
+                </div>
                 <Link
                   href={`/${locale}/account`}
                   onClick={() => setIsMenuOpen(false)}

@@ -37,9 +37,11 @@ const paymentStatusLabels: Record<string, string> = {
 export function AdminOrdersContent({ orders }: AdminOrdersContentProps) {
   const router = useRouter()
   const [updatingId, setUpdatingId] = useState<string | null>(null)
+  const [message, setMessage] = useState<string | null>(null)
 
   const updateStatus = async (orderId: string, newStatus: string) => {
     setUpdatingId(orderId)
+    setMessage(null)
     try {
       const response = await fetch(`/api/orders/${orderId}/status`, {
         method: 'PATCH',
@@ -47,10 +49,14 @@ export function AdminOrdersContent({ orders }: AdminOrdersContentProps) {
         body: JSON.stringify({ status: newStatus }),
       })
 
-      if (!response.ok) throw new Error('Failed to update order status')
+      if (!response.ok) {
+        const data = await response.json().catch(() => null)
+        throw new Error(data?.error || 'Failed to update order status')
+      }
       router.refresh()
     } catch (error) {
       console.error('Error updating order status:', error)
+      setMessage(error instanceof Error ? error.message : 'Failed to update order status')
     } finally {
       setUpdatingId(null)
     }
@@ -71,6 +77,12 @@ export function AdminOrdersContent({ orders }: AdminOrdersContentProps) {
   return (
     <div>
       <h1 className="text-3xl font-bold mb-8">Orders</h1>
+
+      {message && (
+        <div className="mb-4 rounded-md border border-destructive/30 bg-destructive/10 p-3 text-sm text-destructive">
+          {message}
+        </div>
+      )}
 
       <div className="space-y-4">
         {orders.map((order) => {

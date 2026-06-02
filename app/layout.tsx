@@ -38,24 +38,36 @@ const vazirmatn = localFont({
 
 export const metadata: Metadata = {
   title: 'AEIN SHOP | آیین شاپ',
-  description: 'فروشگاه هنری آیین شاپ - تابلو بوم، تی‌شرت و پوستر | AEIN SHOP - Canvas Art, T-Shirts & Posters',
+  description: 'فروشگاه هنری آیین شاپ - ماگ، تی‌شرت و پوستر | AEIN SHOP - Mugs, T-Shirts & Posters',
   generator: 'ka3ra.ir',
   icons: {
     icon: [
       {
         url: '/icon-light-32x32.png',
+        sizes: '32x32',
+        type: 'image/png',
         media: '(prefers-color-scheme: light)',
       },
       {
         url: '/icon-dark-32x32.png',
+        sizes: '32x32',
+        type: 'image/png',
         media: '(prefers-color-scheme: dark)',
       },
       {
-        url: '/icon.svg',
-        type: 'image/svg+xml',
+        url: '/favicon-32x32.png',
+        sizes: '32x32',
+        type: 'image/png',
       },
     ],
-    apple: '/apple-icon.png',
+    shortcut: '/favicon-32x32.png',
+    apple: [
+      {
+        url: '/apple-icon.png',
+        sizes: '180x180',
+        type: 'image/png',
+      },
+    ],
   },
 }
 

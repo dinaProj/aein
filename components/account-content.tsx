@@ -3,6 +3,7 @@
 import { FormEvent, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { LogOut, Package, UserRound } from 'lucide-react'
+import { formatRial } from '@/lib/format'
 import type { CustomerAccount, Locale, Order } from '@/lib/types'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
@@ -86,21 +87,24 @@ export function AccountContent({
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ phone: registerPhone }),
       })
-      const data = (await response.json()) as { devCode?: string }
+      const data = (await response.json()) as { devCode?: string; error?: string }
 
       if (!response.ok) {
-        throw new Error('send failed')
+        throw new Error(data.error || 'send failed')
       }
 
       setPhone(registerPhone)
       setRegisterStep('code')
       setDevCode(data.devCode || null)
       setMessage(locale === 'fa' ? 'کد تایید ارسال شد.' : 'Verification code sent.')
-    } catch {
+    } catch (error) {
+      const message = error instanceof Error ? error.message : ''
       setMessage(
-        locale === 'fa'
-          ? 'ارسال کد انجام نشد. شماره را بررسی کنید یا اگر حساب دارید وارد شوید.'
-          : 'Could not send the code. Check the phone number or login if you already have an account.'
+        message
+          ? message
+          : locale === 'fa'
+            ? 'ارسال کد انجام نشد. شماره را بررسی کنید یا اگر حساب دارید وارد شوید.'
+            : 'Could not send the code. Check the phone number or login if you already have an account.'
       )
     } finally {
       setIsLoading(false)
@@ -313,11 +317,7 @@ export function AccountContent({
         ) : (
           <div className="space-y-4">
             {orders.map((order) => {
-              const total = new Intl.NumberFormat(locale === 'fa' ? 'fa-IR' : 'en-US', {
-                style: 'currency',
-                currency: locale === 'fa' ? 'IRR' : 'USD',
-                maximumFractionDigits: 0,
-              }).format(order.total_amount)
+              const total = formatRial(order.total_amount, locale)
 
               return (
                 <Card key={order.id}>

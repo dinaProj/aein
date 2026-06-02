@@ -6,6 +6,7 @@ import { motion } from 'framer-motion'
 import { ShoppingCart } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { getDictionary } from '@/lib/dictionaries'
+import { formatRial } from '@/lib/format'
 import { useCartStore } from '@/lib/store'
 import type { Locale, Product } from '@/lib/types'
 import { Button } from '@/components/ui/button'
@@ -22,11 +23,7 @@ export function ProductCard({ product, locale }: ProductCardProps) {
 
   const title = locale === 'fa' ? product.title_fa : product.title_en
   const imageUrl = product.images[0] || '/placeholder.jpg'
-  const formattedPrice = new Intl.NumberFormat(locale === 'fa' ? 'fa-IR' : 'en-US', {
-    style: 'currency',
-    currency: locale === 'fa' ? 'IRR' : 'USD',
-    maximumFractionDigits: 0,
-  }).format(product.price)
+  const formattedPrice = formatRial(product.price, locale)
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault()

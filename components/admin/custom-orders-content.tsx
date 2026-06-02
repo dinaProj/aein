@@ -33,9 +33,11 @@ export function AdminCustomOrdersContent({
 }: AdminCustomOrdersContentProps) {
   const router = useRouter()
   const [updatingId, setUpdatingId] = useState<string | null>(null)
+  const [message, setMessage] = useState<string | null>(null)
 
   const updateStatus = async (orderId: string, newStatus: string) => {
     setUpdatingId(orderId)
+    setMessage(null)
     try {
       const response = await fetch(`/api/custom-orders/${orderId}/status`, {
         method: 'PATCH',
@@ -43,10 +45,14 @@ export function AdminCustomOrdersContent({
         body: JSON.stringify({ status: newStatus }),
       })
 
-      if (!response.ok) throw new Error('Failed to update custom order status')
+      if (!response.ok) {
+        const data = await response.json().catch(() => null)
+        throw new Error(data?.error || 'Failed to update custom order status')
+      }
       router.refresh()
     } catch (error) {
       console.error('Error updating custom order status:', error)
+      setMessage(error instanceof Error ? error.message : 'Failed to update custom order status')
     } finally {
       setUpdatingId(null)
     }
@@ -67,6 +73,12 @@ export function AdminCustomOrdersContent({
   return (
     <div>
       <h1 className="text-3xl font-bold mb-8">Custom Orders</h1>
+
+      {message && (
+        <div className="mb-4 rounded-md border border-destructive/30 bg-destructive/10 p-3 text-sm text-destructive">
+          {message}
+        </div>
+      )}
 
       <div className="space-y-4">
         {customOrders.map((order) => (

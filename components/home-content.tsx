@@ -57,12 +57,10 @@ export function HomeContent({ locale, featuredProducts, categories }: HomeConten
                   {dict.home.shopNow}
                 </Button>
               </Link>
-              <Link href={`/${locale}/custom-order`}>
-                <Button variant="outline" size="lg" className="gap-2 text-base px-8">
-                  <Palette className="h-5 w-5" />
-                  {dict.home.startCustomOrder}
-                </Button>
-              </Link>
+              <Button variant="outline" size="lg" className="gap-2 text-base px-8" disabled>
+                <Palette className="h-5 w-5" />
+                {locale === 'fa' ? 'سفارش طرح دلخواه فعلا غیرفعال است' : 'Custom design orders disabled'}
+              </Button>
             </motion.div>
           </div>
         </div>
@@ -188,16 +186,15 @@ export function HomeContent({ locale, featuredProducts, categories }: HomeConten
             <p className="text-lg opacity-90 mb-8">
               {dict.home.customOrderDescription}
             </p>
-            <Link href={`/${locale}/custom-order`}>
-              <Button
-                size="lg"
-                variant="secondary"
-                className="gap-2 text-base px-8"
-              >
-                {dict.home.startCustomOrder}
-                <ArrowIcon className="h-5 w-5" />
-              </Button>
-            </Link>
+            <Button
+              size="lg"
+              variant="secondary"
+              className="gap-2 text-base px-8"
+              disabled
+            >
+              {locale === 'fa' ? 'فعلا غیرفعال' : 'Currently disabled'}
+              <ArrowIcon className="h-5 w-5" />
+            </Button>
           </motion.div>
         </div>
       </section>

@@ -122,12 +122,117 @@
   }
   body {
     @apply bg-background text-foreground;
+    min-height: 100vh;
+    overflow-x: hidden;
+    background:
+      linear-gradient(135deg, rgba(255, 255, 255, 0.96), rgba(232, 245, 255, 0.94) 34%, rgba(247, 252, 255, 0.98) 62%, rgba(225, 241, 255, 0.92)),
+      var(--background);
+    isolation: isolate;
   }
 
   body::before,
   body::after {
-    content: none !important;
-    display: none !important;
+    content: '';
+    position: fixed;
+    inset: -22vmax;
+    z-index: -2;
+    pointer-events: none;
+  }
+
+  body::before {
+    background:
+      conic-gradient(
+        from 112deg at 47% 48%,
+        rgba(12, 67, 162, 0.08),
+        rgba(0, 126, 255, 0.34),
+        rgba(255, 255, 255, 0.22),
+        rgba(102, 192, 255, 0.34),
+        rgba(24, 83, 182, 0.1),
+        rgba(12, 67, 162, 0.08)
+      );
+    filter: blur(42px) saturate(155%);
+    opacity: 0.92;
+    transform-origin: 50% 50%;
+    animation: aein-aurora-drift 13s ease-in-out infinite alternate;
+  }
+
+  body::after {
+    inset: 0;
+    z-index: -1;
+    background:
+      linear-gradient(104deg, transparent 0 18%, rgba(0, 93, 214, 0.16) 29%, rgba(255, 255, 255, 0.66) 36%, transparent 48% 100%),
+      linear-gradient(252deg, transparent 0 32%, rgba(83, 188, 255, 0.2) 45%, rgba(255, 255, 255, 0.44) 51%, transparent 64% 100%),
+      radial-gradient(ellipse at top, rgba(255, 255, 255, 0.9), transparent 58%);
+    background-size: 210% 210%, 190% 190%, 100% 100%;
+    opacity: 0.95;
+    animation: aein-soft-current 10s ease-in-out infinite alternate;
+  }
+
+  .dark body {
+    background:
+      linear-gradient(135deg, rgba(7, 19, 39, 0.98), rgba(10, 35, 76, 0.95) 46%, rgba(8, 17, 33, 0.98)),
+      var(--background);
+  }
+
+  .dark body::before {
+    opacity: 0.5;
+    filter: blur(64px) saturate(125%);
+  }
+
+  .dark body::after {
+    opacity: 0.32;
+  }
+}
+
+@keyframes aein-aurora-drift {
+  0% {
+    transform: translate3d(-5%, -4%, 0) rotate(0deg) scale(1);
+  }
+  50% {
+    transform: translate3d(4%, 3%, 0) rotate(22deg) scale(1.1);
+  }
+  100% {
+    transform: translate3d(6%, -2%, 0) rotate(-18deg) scale(1.05);
+  }
+}
+
+@keyframes aein-soft-current {
+  0% {
+    background-position: 0% 45%, 100% 55%, center top;
+  }
+  100% {
+    background-position: 100% 56%, 0% 42%, center top;
+  }
+}
+
+@keyframes aein-light-sweep {
+  0% {
+    background-position: 0% 35%, 100% 60%, 20% 50%;
+    transform: scale(1);
+  }
+  100% {
+    background-position: 100% 62%, 0% 42%, 90% 50%;
+    transform: scale(1.04);
+  }
+}
+
+@keyframes aein-glass-lines {
+  0% {
+    transform: translate3d(-3%, 0, 0) rotate(0.001deg);
+    background-position: 0 0;
+  }
+  100% {
+    transform: translate3d(3%, 0, 0) rotate(0.001deg);
+    background-position: 180px 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html::before,
+  html::after,
+  body::before,
+  body::after {
+    animation: none;
   }
 }
 
@@ -151,6 +256,42 @@
 /* Smooth scroll */
 html {
   scroll-behavior: smooth;
+  min-height: 100%;
+  background: #f8fbff;
+}
+
+html::before,
+html::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -3;
+  pointer-events: none;
+}
+
+html::before {
+  background:
+    linear-gradient(110deg, transparent 0 17%, rgba(6, 84, 190, 0.1) 22%, transparent 31% 100%),
+    linear-gradient(290deg, transparent 0 34%, rgba(72, 177, 255, 0.16) 43%, transparent 55% 100%),
+    linear-gradient(18deg, transparent 0 45%, rgba(255, 255, 255, 0.8) 51%, transparent 61% 100%);
+  background-size: 260% 260%, 220% 220%, 180% 180%;
+  filter: blur(10px);
+  opacity: 0.9;
+  animation: aein-light-sweep 12s ease-in-out infinite alternate;
+}
+
+html::after {
+  background:
+    repeating-linear-gradient(
+      118deg,
+      transparent 0 44px,
+      rgba(28, 126, 232, 0.045) 45px 46px,
+      transparent 47px 124px
+    );
+  mask-image: linear-gradient(to bottom, transparent, black 14%, black 78%, transparent);
+  opacity: 0.42;
+  transform-origin: center;
+  animation: aein-glass-lines 20s linear infinite;
 }
 
 /* Custom scrollbar */
