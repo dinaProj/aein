@@ -43,22 +43,42 @@ export async function sendSmsIrVerifyCode(phone: string, code: string) {
 
   let response: Response | null = null
   try {
-    response = await fetch('https://api.sms.ir/v1/send/verify', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
-        'X-API-KEY': apiKey,
-      },
-      body: JSON.stringify(payload),
-    })
+    const controller = new AbortController()
+    const timeoutId = setTimeout(() => controller.abort(), 15000) // 15 second timeout
+
+    try {
+      response = await fetch('https://api.sms.ir/v1/send/verify', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+          'X-API-KEY': apiKey,
+          'User-Agent': 'Mozilla/5.0 (Node.js)',
+        },
+        body: JSON.stringify(payload),
+        signal: controller.signal,
+      })
+      clearTimeout(timeoutId)
+    } catch (timeoutOrFetchError) {
+      clearTimeout(timeoutId)
+      throw timeoutOrFetchError
+    }
   } catch (fetchError) {
+    const errorMsg = fetchError instanceof Error ? fetchError.message : String(fetchError)
+    const isTimeout = errorMsg.includes('abort') || errorMsg.includes('timeout')
+    
     console.error('[SMS.ir] Fetch error (network/connectivity issue):', {
-      message: fetchError instanceof Error ? fetchError.message : String(fetchError),
+      message: errorMsg,
+      isTimeout,
       url: 'https://api.sms.ir/v1/send/verify',
+      nodeEnv: process.env.NODE_ENV,
     })
+    
+    if (isTimeout) {
+      throw new Error(`SMS.ir request timeout (15s): Service not responding quickly`)
+    }
     throw new Error(
-      `Unable to connect to SMS.ir service: ${fetchError instanceof Error ? fetchError.message : 'Unknown error'}`
+      `Unable to connect to SMS.ir service: ${errorMsg}`
     )
   }
 
