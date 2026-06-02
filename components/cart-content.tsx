@@ -82,6 +82,32 @@ export function CartContent({ locale }: CartContentProps) {
 
     try {
       const form = new FormData(event.currentTarget)
+      const trackingNumber = String(form.get('payment_tracking_number') || '').trim()
+      const postalCode = String(form.get('postal_code') || '').trim()
+      const buildingNumber = String(form.get('building_number') || '').trim()
+      const unitNumber = String(form.get('unit_number') || '').trim()
+
+      // Validation
+      if (!postalCode || !buildingNumber || !unitNumber) {
+        setMessage(
+          locale === 'fa'
+            ? 'کد پستی، پلاک و واحد الزامی هستند.'
+            : 'Postal code, building number, and unit number are required.'
+        )
+        setIsSubmitting(false)
+        return
+      }
+
+      if (!/^\d{12}$/.test(trackingNumber)) {
+        setMessage(
+          locale === 'fa'
+            ? 'شماره پیگیری باید دقیقاً 12 رقم باشد.'
+            : 'Payment tracking number must be exactly 12 digits.'
+        )
+        setIsSubmitting(false)
+        return
+      }
+
       form.set('payment_method', 'card_to_card')
       form.set('items', JSON.stringify(items))
 
@@ -387,15 +413,42 @@ export function CartContent({ locale }: CartContentProps) {
                 <Textarea id="shipping_address" name="shipping_address" required />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="payment_tracking_number">
-                  {locale === 'fa' ? 'شماره پیگیری واریز' : 'Payment Tracking Number'}
+                <Label htmlFor="postal_code">
+                  {locale === 'fa' ? 'کد پستی *' : 'Postal Code *'}
                 </Label>
-                <Input id="payment_tracking_number" name="payment_tracking_number" required />
+                <Input id="postal_code" name="postal_code" required />
               </div>
               <div className="space-y-2">
+                <Label htmlFor="building_number">
+                  {locale === 'fa' ? 'پلاک *' : 'Building Number *'}
+                </Label>
+                <Input id="building_number" name="building_number" required />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="unit_number">
+                  {locale === 'fa' ? 'واحد *' : 'Unit Number *'}
+                </Label>
+                <Input id="unit_number" name="unit_number" required />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="payment_tracking_number">
+                  {locale === 'fa' ? 'شماره پیگیری واریز (12 رقم) *' : 'Payment Tracking Number (12 digits) *'}
+                </Label>
+                <Input 
+                  id="payment_tracking_number" 
+                  name="payment_tracking_number" 
+                  inputMode="numeric"
+                  maxLength={12}
+                  required 
+                />
+                <p className="text-xs text-muted-foreground">
+                  {locale === 'fa' ? 'باید دقیقاً 12 رقم باشد' : 'Must be exactly 12 digits'}
+                </p>
+              </div>
+              <div className="space-y-2 sm:col-span-2">
                 <Label htmlFor="payment_receipt" className="flex items-center gap-2">
                   <Upload className="h-4 w-4" />
-                  {locale === 'fa' ? 'آپلود فیش' : 'Upload Receipt'}
+                  {locale === 'fa' ? 'آپلود فیش *' : 'Upload Receipt *'}
                 </Label>
                 <Input
                   id="payment_receipt"

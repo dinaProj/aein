@@ -31,6 +31,9 @@ export async function POST(request: NextRequest) {
     const formData = await request.formData()
     const customerName = String(formData.get('customer_name') || '').trim()
     const shippingAddress = String(formData.get('shipping_address') || '').trim()
+    const postalCode = String(formData.get('postal_code') || '').trim()
+    const buildingNumber = String(formData.get('building_number') || '').trim()
+    const unitNumber = String(formData.get('unit_number') || '').trim()
     const trackingNumber = String(formData.get('payment_tracking_number') || '').trim()
     const paymentMethod = String(formData.get('payment_method') || 'card_to_card')
     const rawItems = String(formData.get('items') || '[]')
@@ -40,8 +43,18 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Payment gateway is disabled' }, { status: 400 })
     }
 
-    if (!shippingAddress || !trackingNumber) {
-      return NextResponse.json({ error: 'Missing required fields' }, { status: 400 })
+    if (!shippingAddress || !postalCode || !buildingNumber || !unitNumber || !trackingNumber) {
+      return NextResponse.json(
+        { error: 'Shipping address, postal code, building number, unit number, and tracking number are required' },
+        { status: 400 }
+      )
+    }
+
+    if (!/^\d{12}$/.test(trackingNumber)) {
+      return NextResponse.json(
+        { error: 'Payment tracking number must be exactly 12 digits' },
+        { status: 400 }
+      )
     }
 
     if (!(receipt instanceof File) || receipt.size === 0) {
@@ -58,12 +71,13 @@ export async function POST(request: NextRequest) {
       0
     )
     const receiptUrl = await saveReceipt(receipt)
+    const fullAddress = `${shippingAddress}\nکد پستی: ${postalCode}\nپلاک: ${buildingNumber}\nواحد: ${unitNumber}`
     const order = await addOrder({
       customer_id: customer.id,
       customer_name: customerName || customer.name || customer.phone,
       customer_email: customer.email,
       customer_phone: customer.phone,
-      shipping_address: shippingAddress,
+      shipping_address: fullAddress,
       items,
       total_amount: totalAmount,
       payment_method: 'card_to_card',
