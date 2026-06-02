@@ -242,6 +242,14 @@ export function AccountContent({
                 </form>
               ) : (
                 <form className="space-y-4" onSubmit={register}>
+                  {devCode && (
+                    <div className="rounded-md border border-yellow-300 bg-yellow-50 p-4 text-sm text-yellow-900 shadow-sm">
+                      <p className="font-semibold">
+                        {locale === 'fa' ? 'کد تایید برای تست:' : 'Verification code for test:'}
+                      </p>
+                      <p className="mt-1 text-lg font-bold tracking-[0.25em]">{devCode}</p>
+                    </div>
+                  )}
                   <div className="rounded-md border bg-secondary/50 p-3 text-sm text-muted-foreground">
                     {locale === 'fa' ? `کد ثبت‌نام به ${phone} ارسال شد.` : `Register code sent to ${phone}.`}
                   </div>
@@ -257,16 +265,7 @@ export function AccountContent({
                     <Label htmlFor="password-confirm">{locale === 'fa' ? 'تکرار رمز عبور' : 'Confirm Password'}</Label>
                     <Input id="password-confirm" name="password_confirm" type="password" minLength={6} required />
                   </div>
-
-                  {devCode && (
-                    <p className="rounded-md bg-yellow-500/10 p-3 text-sm text-yellow-700">
-                      {locale === 'fa'
-                        ? `حالت تست: کد شما ${devCode} است.`
-                        : `Dev mode: your code is ${devCode}.`}
-                    </p>
-                  )}
                   {message && <p className="text-sm text-destructive">{message}</p>}
-
                   <Button className="w-full" type="submit" disabled={isLoading}>
                     {isLoading ? (locale === 'fa' ? 'در حال ثبت‌نام...' : 'Registering...') : locale === 'fa' ? 'ثبت‌نام' : 'Register'}
                   </Button>
