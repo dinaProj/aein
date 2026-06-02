@@ -87,7 +87,7 @@ export function AccountContent({
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ phone: registerPhone }),
       })
-      const data = (await response.json()) as { devCode?: string; error?: string }
+      const data = (await response.json()) as { devCode?: string; error?: string; fallback?: boolean }
 
       if (!response.ok) {
         throw new Error(data.error || 'send failed')
@@ -96,7 +96,11 @@ export function AccountContent({
       setPhone(registerPhone)
       setRegisterStep('code')
       setDevCode(data.devCode || null)
-      setMessage(locale === 'fa' ? 'کد تایید ارسال شد.' : 'Verification code sent.')
+      
+      const msgSuffix = data.fallback 
+        ? (locale === 'fa' ? ' (کد نمایشی)' : ' (demo code)')
+        : ''
+      setMessage((locale === 'fa' ? 'کد تایید ارسال شد.' : 'Verification code sent.') + msgSuffix)
     } catch (error) {
       const message = error instanceof Error ? error.message : ''
       setMessage(

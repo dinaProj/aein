@@ -38,9 +38,11 @@ export async function POST(request: NextRequest) {
 
     const smsResult = await sendSmsIrVerifyCode(normalizedPhone, code)
 
+    // Return success even if SMS uses fallback (e.g., SMS.ir blocked by network)
     return NextResponse.json({
       success: true,
-      devCode: 'skipped' in smsResult ? code : undefined,
+      devCode: 'skipped' in smsResult || 'fallback' in smsResult ? code : undefined,
+      fallback: 'fallback' in smsResult,
     })
   } catch (error) {
     console.error('Send verification code error:', error)

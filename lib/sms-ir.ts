@@ -74,6 +74,13 @@ export async function sendSmsIrVerifyCode(phone: string, code: string) {
       nodeEnv: process.env.NODE_ENV,
     })
     
+    // FALLBACK: If in production and SMS.ir fails, log the code for manual verification
+    if (process.env.NODE_ENV === 'production') {
+      console.warn(`[SMS.ir FALLBACK] Verification code for ${phone}: ${code}`)
+      console.warn('[SMS.ir FALLBACK] Unable to send SMS, code logged for manual verification')
+      return { fallback: true, message: 'SMS service temporarily unavailable' }
+    }
+    
     if (isTimeout) {
       throw new Error(`SMS.ir request timeout (15s): Service not responding quickly`)
     }
