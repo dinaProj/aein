@@ -1,6 +1,3 @@
-import { randomUUID } from 'crypto'
-import { mkdir, writeFile } from 'fs/promises'
-import path from 'path'
 import { NextRequest, NextResponse } from 'next/server'
 import { addOrder } from '@/lib/local-db'
 import { getCurrentCustomer } from '@/lib/customer-auth'
@@ -18,16 +15,9 @@ async function saveReceipt(file: File) {
     throw new Error('Receipt file is too large')
   }
 
-  const extension = path.extname(file.name) || '.jpg'
-  const fileName = `${randomUUID()}${extension}`
-  const uploadDir = path.join(process.cwd(), 'public', 'uploads', 'payment-receipts')
-  const filePath = path.join(uploadDir, fileName)
   const buffer = Buffer.from(await file.arrayBuffer())
-
-  await mkdir(uploadDir, { recursive: true })
-  await writeFile(filePath, buffer)
-
-  return `/uploads/payment-receipts/${fileName}`
+  const base64 = buffer.toString('base64')
+  return `data:${file.type};base64,${base64}`
 }
 
 export async function POST(request: NextRequest) {
@@ -84,6 +74,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ orderId: order.id, success: true })
   } catch (error) {
     console.error('Create order error:', error)
-    return NextResponse.json({ error: 'Failed to create order' }, { status: 500 })
+    const message = error instanceof Error ? error.message : 'Failed to create order'
+    return NextResponse.json({ error: message }, { status: 500 })
   }
 }

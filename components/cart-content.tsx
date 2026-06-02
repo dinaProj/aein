@@ -95,7 +95,14 @@ export function CartContent({ locale }: CartContentProps) {
           router.push(`/${locale}/account?redirect=/${locale}/cart`)
           return
         }
-        throw new Error('failed')
+
+        const errorData = await response.json().catch(() => null)
+        const errorMessage = errorData?.error
+          ? String(errorData.error)
+          : locale === 'fa'
+            ? 'ثبت سفارش انجام نشد. لطفا اطلاعات و فایل فیش را بررسی کنید.'
+            : 'Order submission failed. Please check the form and receipt file.'
+        throw new Error(errorMessage)
       }
 
       clearCart()
@@ -105,11 +112,12 @@ export function CartContent({ locale }: CartContentProps) {
           ? 'سفارش ثبت شد و پس از تایید ادمین وارد مرحله انجام می‌شود.'
           : 'Your order was submitted and will start processing after admin approval.'
       )
-    } catch {
+    } catch (error) {
+      const message = error instanceof Error ? error.message : ''
       setMessage(
-        locale === 'fa'
+        message || (locale === 'fa'
           ? 'ثبت سفارش انجام نشد. لطفا اطلاعات و فایل فیش را بررسی کنید.'
-          : 'Order submission failed. Please check the form and receipt file.'
+          : 'Order submission failed. Please check the form and receipt file.')
       )
     } finally {
       setIsSubmitting(false)
