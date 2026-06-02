@@ -122,8 +122,20 @@ export function AccountContent({
 
     const form = new FormData(event.currentTarget)
     const code = String(form.get('code') || '').trim()
+    const firstName = String(form.get('first_name') || '').trim()
+    const lastName = String(form.get('last_name') || '').trim()
     const password = String(form.get('password') || '')
     const passwordConfirm = String(form.get('password_confirm') || '')
+
+    if (!firstName || !lastName) {
+      setMessage(
+        locale === 'fa'
+          ? 'نام و نام‌خانوادگی را کامل وارد کنید.'
+          : 'Please enter both first name and last name.'
+      )
+      setIsLoading(false)
+      return
+    }
 
     if (password.length < 6 || password !== passwordConfirm) {
       setMessage(
@@ -139,16 +151,25 @@ export function AccountContent({
       const response = await fetch('/api/customer/verify-code', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ phone, code, password }),
+        body: JSON.stringify({ phone, code, password, first_name: firstName, last_name: lastName }),
       })
 
       if (!response.ok) {
-        throw new Error('register failed')
+        const responseData = await response.json().catch(() => null)
+        const errorMessage = responseData?.error
+          ? String(responseData.error)
+          : locale === 'fa'
+            ? 'ثبت‌نام ناموفق بود.'
+            : 'Registration failed.'
+        throw new Error(errorMessage)
       }
 
       afterAuth()
-    } catch {
-      setMessage(locale === 'fa' ? 'کد تایید اشتباه یا منقضی شده است.' : 'The code is invalid or expired.')
+    } catch (error) {
+      const message = error instanceof Error ? error.message : ''
+      setMessage(
+        message || (locale === 'fa' ? 'کد تایید اشتباه یا منقضی شده است.' : 'The code is invalid or expired.')
+      )
     } finally {
       setIsLoading(false)
     }
@@ -245,13 +266,23 @@ export function AccountContent({
                   {devCode && (
                     <div className="rounded-md border border-yellow-300 bg-yellow-50 p-4 text-sm text-yellow-900 shadow-sm">
                       <p className="font-semibold">
-                        {locale === 'fa' ? 'کد تایید برای تست:' : 'Verification code for test:'}
+                        {locale === 'fa' ? 'کد تایید شماره شما:' : 'Verification code for your number:'}
                       </p>
                       <p className="mt-1 text-lg font-bold tracking-[0.25em]">{devCode}</p>
                     </div>
                   )}
                   <div className="rounded-md border bg-secondary/50 p-3 text-sm text-muted-foreground">
                     {locale === 'fa' ? `کد ثبت‌نام به ${phone} ارسال شد.` : `Register code sent to ${phone}.`}
+                  </div>
+                  <div className="grid gap-4 sm:grid-cols-2">
+                    <div className="space-y-2">
+                      <Label htmlFor="first_name">{locale === 'fa' ? 'نام' : 'First Name'}</Label>
+                      <Input id="first_name" name="first_name" type="text" required />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="last_name">{locale === 'fa' ? 'نام خانوادگی' : 'Last Name'}</Label>
+                      <Input id="last_name" name="last_name" type="text" required />
+                    </div>
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="code">{locale === 'fa' ? 'کد تایید' : 'Verification Code'}</Label>
