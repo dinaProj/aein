@@ -329,7 +329,14 @@ export function AccountContent({
             <h1 className="text-3xl font-bold">
               {locale === 'fa' ? 'پنل کاربری' : 'Account'}
             </h1>
-            <p className="mt-2 text-muted-foreground">{customer.phone}</p>
+            {customer.name ? (
+              <>
+                <p className="mt-2 text-muted-foreground">{customer.name}</p>
+                <p className="text-sm text-muted-foreground">{customer.phone}</p>
+              </>
+            ) : (
+              <p className="mt-2 text-muted-foreground">{customer.phone}</p>
+            )}
           </div>
           <Button variant="outline" onClick={logout} className="gap-2">
             <LogOut className="h-4 w-4" />
